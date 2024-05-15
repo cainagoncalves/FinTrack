@@ -4,7 +4,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back"
+    android:background="@color/app_financa"
     tools:context=".MainActivity">
 
     <TextView
@@ -256,7 +256,6 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/agrandir"
-            android:text="Spotify"
             android:textColor="@color/app_financa2"
             android:textSize="16sp" />
 
