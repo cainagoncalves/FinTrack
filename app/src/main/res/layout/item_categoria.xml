@@ -1,0 +1,22 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="categoria"
+            type="com.example.fintrack.CategoriaUi" />
+    </data>
+
+    <ImageView
+        android:id="@+id/icon_categoria"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/filter_chips_background"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="Categoria Casa"
+        android:scaleType="centerInside"
+        app:imageResource="@{categoria.iconeCategoria}" />
+</layout>

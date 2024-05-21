@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/Adicionar_despesa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:drawableLeft="@drawable/inicial"
+        android:fontFamily="@font/leonardo"
+        android:paddingStart="8dp"
+        android:text="  Adicione uma despesa"
+        android:textColor="@color/app_financa2"
+        android:textSize="22sp" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/tie_nome_despesa"
+        android:layout_width="372dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:textColorHint="@color/text_hint"
+        android:textColor="@color/app_financa2"
+        android:hint="Ex.: Compras de mercado"
+        android:layout_marginEnd="24dp"
+        android:orientation="horizontal"
+        tools:listitem="@layout/item_despesa" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/tie_valor_despesa"
+        android:layout_width="372dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:textColorHint="@color/text_hint"
+        android:textColor="@color/app_financa2"
+        android:hint="Ex.: 395.60"
+        android:layout_marginEnd="24dp"
+        android:orientation="horizontal"
+        tools:listitem="@layout/item_despesa" />
+
+    <TextView
+        android:id="@+id/tv_categoriaDespesa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/leonardo"
+        android:text="Categoria da despesa"
+        android:textColor="@color/app_financa2"
+        android:textSize="16sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_vincular_categoria"
+        android:layout_width="372dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:orientation="horizontal"
+        tools:listitem="@layout/item_categoria" />
+
+    <Button
+        android:id="@+id/btn_adicionar_despesa_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_bg"
+        android:fontFamily="@font/leonardo"
+        android:text="Adicionar despesa"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

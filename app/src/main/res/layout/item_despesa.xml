@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="despesa"
+            type="com.example.fintrack.DespesaUi" />
+
+        <variable
+            name="categoria"
+            type="com.example.fintrack.CategoriaUi" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/set_color_despesa"
+            android:layout_width="11dp"
+            android:layout_marginRight="8dp"
+            android:layout_height="55dp"
+            android:background="@drawable/despesas_dia_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:backgroundTint="@color/light_orange"
+            app:layout_constraintTop_toTopOf="@+id/ic_category"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <ImageView
+            android:id="@+id/ic_category"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/filter_chips_background"
+            android:contentDescription="@null"
+            android:scaleType="centerInside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@{categoria.iconeCategoria}" />
+
+        <TextView
+            android:id="@+id/tv_despesa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/agrandir"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/set_color_despesa"
+            app:layout_constraintStart_toEndOf="@id/ic_category"
+            app:layout_constraintTop_toTopOf="@id/ic_category"
+            tools:text="@{despesa.nome}" />
+
+        <TextView
+            android:id="@+id/tv_valor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/leonardo"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/set_color_despesa"
+            app:layout_constraintStart_toStartOf="@+id/tv_despesa"
+            app:layout_constraintTop_toBottomOf="@+id/tv_despesa"
+            tools:text="@{`-R$ ` + despesa.valor}" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,11 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back"
+    android:background="@color/background_color"
     tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
     <TextView
         android:id="@+id/Ola_user"
@@ -17,7 +24,7 @@
         android:drawableLeft="@drawable/inicial"
         android:fontFamily="@font/leonardo"
         android:paddingStart="8dp"
-        android:text="   Olá Leonardo,"
+        android:text="  FinTrack"
         android:textColor="@color/app_financa2"
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +40,8 @@
         android:layout_marginEnd="18dp"
         android:background="@drawable/tela_principal_bg"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/Ola_user">
+        app:layout_constraintTop_toBottomOf="@+id/Ola_user"
+        tools:layout_editor_absoluteX="18dp">
 
         <TextView
             android:id="@+id/Saldo_atual"
@@ -50,7 +58,7 @@
             android:id="@+id/valor_saldo"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/leonardo"
             android:text="R$ 13.211,00"
@@ -60,101 +68,78 @@
 
     </LinearLayout>
 
-    <!-- Segundo Container abaixo do primeiro Container -->
-    <LinearLayout
-        android:id="@+id/container_layout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="220dp"
-        android:background="@drawable/despesas_dia_bg"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/container_layout">
-
-        <TextView
-            android:id="@+id/despesas_do_dia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="24dp"
-            android:fontFamily="@font/agrandir"
-            android:text="Despesas do dia"
-            android:textColor="@color/white" />
-
-        <TextView
-            android:id="@+id/valor_despesas"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/leonardo"
-            android:text="R$ 211,00"
-            android:textColor="@color/white"
-            android:textSize="28sp" />
-
-
-    </LinearLayout>
-
-    <!-- Terceiro Container ao lado do segundo Container -->
-    <LinearLayout
-        android:id="@+id/container_layout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="210dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="18dp"
-        android:background="@drawable/despesas_dia_bg"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/container_layout">
-
-        <TextView
-            android:id="@+id/despesas_semanais"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/agrandir"
-            android:text="Despesas semanais"
-            android:textColor="@color/white" />
-
-        <TextView
-            android:id="@+id/valor_despesas_semanais"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/leonardo"
-            android:text="R$ 411,00"
-            android:textColor="@color/white"
-            android:textSize="28sp" />
-
-    </LinearLayout>
-
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="8dp"
         android:fontFamily="@font/leonardo"
+        android:layout_marginStart="18dp"
         android:text="Categorias de despesa"
+        android:layout_marginTop="8dp"
         android:textColor="@color/app_financa2"
         android:textSize="22sp"
-        app:layout_constraintTop_toBottomOf="@+id/container_layout2" />
+        app:layout_constraintTop_toBottomOf="@+id/container_layout"
+        tools:layout_editor_absoluteX="18dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_categoria"
+        android:layout_width="296dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintStart_toEndOf="@+id/btn_category_create"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        tools:ignore="MissingConstraints"
+        tools:listitem="@layout/item_categoria" />
+
+    <Button
+        android:id="@+id/btn_category_create"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/filter_chips_background"
+        android:text="+"
+        android:textColor="@drawable/filter_text_color"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/leonardo"
         android:text="Últimas Transações"
         android:textColor="@color/app_financa2"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_categoria" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_despesa"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="18dp"
+        android:background="@drawable/despesas_dia_bg"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        tools:ignore="MissingConstraints"
+        tools:listitem="@layout/item_despesa" />
 
     <Button
         android:id="@+id/button"
@@ -166,111 +151,11 @@
         android:background="@drawable/button_bg"
         android:fontFamily="@font/leonardo"
         android:text="Adicionar despesa"
-        android:textSize="22sp"
+        android:textSize="17sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/button_add_cat"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/adicionardesepesa"
-        android:text="+"
-        android:textColor="@color/app_financa2"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <!-- ScrollView para categorias -->
-    <HorizontalScrollView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintStart_toEndOf="@+id/button_add_cat"
-        app:layout_constraintTop_toBottomOf="@+id/textView3">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <!-- Adicione os botões de categoria aqui -->
-            <ImageButton
-                android:layout_width="66dp"
-                android:layout_height="66dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/adicionardesepesa"
-                android:contentDescription="Categoria Casa"
-                android:src="@drawable/ic_home" />
-
-            <ImageButton
-                android:layout_width="66dp"
-                android:layout_height="66dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/adicionardesepesa"
-                android:contentDescription="Categoria Alimentação"
-                android:src="@drawable/ic_gas_station" />
-
-            <ImageButton
-                android:layout_width="66dp"
-                android:layout_height="66dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/adicionardesepesa"
-                android:contentDescription="Categoria Transporte"
-                android:src="@drawable/ic_credit_card" />
-
-            <ImageButton
-                android:layout_width="66dp"
-                android:layout_height="66dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/adicionardesepesa"
-                android:contentDescription="Categoria Transporte"
-                android:src="@drawable/ic_clothes" />
-
-
-            <!-- Adicione mais botões conforme necessário -->
-
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <LinearLayout
-        android:id="@+id/container_layout4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="18dp"
-        android:background="@drawable/despesas_dia_bg"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/textView4">
-
-        <TextView
-            android:id="@+id/historico_1"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/agrandir"
-            android:text="Spotify"
-            android:textColor="@color/app_financa2"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/valor_saldoo"
-            android:layout_width="match_parent"
-            android:layout_height="124dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/leonardo"
-            android:text=""
-            android:textColor="@color/app_financa2"
-            android:textSize="36sp"
-            android:textStyle="bold" />
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

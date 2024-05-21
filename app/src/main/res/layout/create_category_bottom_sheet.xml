@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/Criar_cateroria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:drawableLeft="@drawable/inicial"
+        android:fontFamily="@font/leonardo"
+        android:paddingStart="8dp"
+        android:text="  Cria uma categoria"
+        android:textColor="@color/app_financa2"
+        android:textSize="22sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_criar_categoria"
+        android:layout_width="372dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:orientation="horizontal"
+        tools:listitem="@layout/item_categoria" />
+
+    <TextView
+        android:id="@+id/tv_corCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/leonardo"
+        android:text="Escolha uma cor para a categoria"
+        android:textColor="@color/app_financa2"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/set_color_categoria_icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/set_color_categoria_blue"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/water_blue" />
+
+        <Button
+            android:id="@+id/set_color_categoria_green"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/water_green" />
+
+        <Button
+            android:id="@+id/set_color_categoria_brown"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/brown" />
+
+        <Button
+            android:id="@+id/set_color_categoria_yellow"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/medium_yellow" />
+
+        <Button
+            android:id="@+id/set_color_categoria_orange"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/light_orange" />
+
+        <Button
+            android:id="@+id/set_color_categoria_ocean_blue"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/ocean_blue" />
+
+        <!-- Adicione mais botões conforme necessário -->
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_criar_categoria_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_bg"
+        android:fontFamily="@font/leonardo"
+        android:text="Criar categoria"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
