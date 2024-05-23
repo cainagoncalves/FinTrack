@@ -16,7 +16,9 @@
         android:background="@drawable/filter_chips_background"
         android:clickable="true"
         android:focusable="true"
+        android:src="@drawable/ic_add"
         android:contentDescription="Categoria Casa"
         android:scaleType="centerInside"
-        app:imageResource="@{categoria.iconeCategoria}" />
+        app:imageResource="@{categoria.iconeCategoria}"
+        android:tint="@color/white" />
 </layout>

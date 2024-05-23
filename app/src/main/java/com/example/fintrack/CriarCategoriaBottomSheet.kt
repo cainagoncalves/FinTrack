@@ -5,22 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-
-
-class CriarCategoriaBottomSheet : BottomSheetDialogFragment() {
+class CriarCategoriaBottomSheet(
+    private val onCreateClicked: (idCategoria: Long, iconeCategoria: Int, corCategoria: Int) -> Unit
+) : BottomSheetDialogFragment() {
 
     private var listener: OnCategoriaCreatedListener? = null
     private var selectedCategoria: CategoriaUi? = null
-
-    fun setOnCategoriaCreatedListener(listener: OnCategoriaCreatedListener) {
-        this.listener = listener
-    }
+    private var selectedColor: Int = R.color.white // Cor padrão
+    private var selectedButton: Button? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,22 +25,46 @@ class CriarCategoriaBottomSheet : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.create_category_bottom_sheet, container, false)
-        val btnCriar = view.findViewById<Button>(R.id.btn_criar_categoria_sheet)
-        val recyclerViewCategoria = view.findViewById<RecyclerView>(R.id.rv_criar_categoria)
-        recyclerViewCategoria.layoutManager = LinearLayoutManager(context).apply {
+
+        val btnCreate = view.findViewById<Button>(R.id.btn_criar_categoria_sheet)
+        val rvCriarCategoria = view.findViewById<RecyclerView>(R.id.rv_criar_categoria)
+        val colorButtons = listOf(
+            view.findViewById<Button>(R.id.set_color_categoria_blue),
+            view.findViewById(R.id.set_color_categoria_green),
+            view.findViewById(R.id.set_color_categoria_brown),
+            view.findViewById(R.id.set_color_categoria_yellow),
+            view.findViewById(R.id.set_color_categoria_orange),
+            view.findViewById(R.id.set_color_categoria_ocean_blue)
+        )
+        rvCriarCategoria.layoutManager = LinearLayoutManager(context).apply {
             orientation = LinearLayoutManager.HORIZONTAL
         }
+
         val listaCategoria = mutableListOf<CategoriaUi>()
-        val categoriaAdapter = CategoriaAdapter(requireContext(), listaCategoria) { categoria ->
-            selectedCategoria = categoria
-        }
-        recyclerViewCategoria.setHasFixedSize(true)
-        recyclerViewCategoria.adapter = categoriaAdapter
         getCategoria(listaCategoria)
 
-        btnCriar.setOnClickListener {
+        // Crie e configure o adapter
+        val categoriaAdapter = CategoriaAdapter()
+        categoriaAdapter.setOnItemClickListener { categoria ->
+            selectedCategoria = categoria
+        }
+        rvCriarCategoria.adapter = categoriaAdapter
+        categoriaAdapter.submitList(listaCategoria)
+
+        // Configurando os botões de cor
+        colorButtons.forEach { button ->
+            button.setOnClickListener {
+                selectedColor = button.backgroundTintList?.defaultColor ?: R.color.white
+                selectedButton?.setBackgroundResource(R.drawable.filter_chips_background)
+                selectedButton = button
+                selectedButton?.setBackgroundResource(R.drawable.selected_button_background)
+            }
+        }
+
+        btnCreate.setOnClickListener {
             selectedCategoria?.let { categoria ->
-                listener?.onCategoriaCreated(categoria)
+                val idCategoria = System.currentTimeMillis() // Exemplo para gerar um ID único
+                onCreateClicked(idCategoria, categoria.iconeCategoria, selectedColor)
                 dismiss()
             }
         }
@@ -61,13 +82,13 @@ class CriarCategoriaBottomSheet : BottomSheetDialogFragment() {
 
     private fun getCategoria(listaCategoria: MutableList<CategoriaUi>) {
         listaCategoria.apply {
-            add(CategoriaUi(R.drawable.ic_home,false))
+            add(CategoriaUi(R.drawable.ic_home, false))
             add(CategoriaUi(R.drawable.ic_key, false))
             add(CategoriaUi(R.drawable.ic_wifi, false))
             add(CategoriaUi(R.drawable.ic_clothes, false))
             add(CategoriaUi(R.drawable.ic_electricity, false))
             add(CategoriaUi(R.drawable.ic_car, false))
-            add(CategoriaUi(R.drawable.ic_credit_card,  false))
+            add(CategoriaUi(R.drawable.ic_credit_card, false))
             add(CategoriaUi(R.drawable.ic_shopping_cart, false))
             add(CategoriaUi(R.drawable.ic_water_drop, false))
             add(CategoriaUi(R.drawable.ic_gas_station, false))

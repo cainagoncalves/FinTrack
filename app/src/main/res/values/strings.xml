@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FinTrack</string>
+    <string name="home_title">FinTrack</string>
+    <string name="add_despesa_title">Adicionar despesa</string>
+    <string name="add">Adicionar</string>
+    <string name="atualizar_despesa_title">Atualizar despesa</string>
+    <string name="atualizar">Atualizar</string>
 </resources>

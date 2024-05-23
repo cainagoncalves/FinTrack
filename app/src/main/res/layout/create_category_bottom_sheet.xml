@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,9 +16,10 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:drawableLeft="@drawable/inicial"
+        android:drawablePadding="12dp"
         android:fontFamily="@font/leonardo"
         android:paddingStart="8dp"
-        android:text="  Cria uma categoria"
+        android:text="Criar uma categoria"
         android:textColor="@color/app_financa2"
         android:textSize="22sp" />
 
@@ -29,6 +31,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_categoria" />
 
     <TextView
@@ -57,42 +60,60 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/water_blue" />
+            android:background="@drawable/filter_chips_background"
+            android:backgroundTint="@color/water_blue"
+            android:clickable="true"
+            android:focusable="true" />
 
         <Button
             android:id="@+id/set_color_categoria_green"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/water_green" />
+            android:background="@drawable/filter_chips_background"
+            android:backgroundTint="@color/water_green"
+            android:clickable="true"
+            android:focusable="true" />
 
         <Button
             android:id="@+id/set_color_categoria_brown"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/brown" />
+            android:background="@drawable/filter_chips_background"
+            android:backgroundTint="@color/brown"
+            android:clickable="true"
+            android:focusable="true" />
 
         <Button
             android:id="@+id/set_color_categoria_yellow"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/medium_yellow" />
+            android:background="@drawable/filter_chips_background"
+            android:backgroundTint="@color/medium_yellow"
+            android:clickable="true"
+            android:focusable="true" />
 
         <Button
             android:id="@+id/set_color_categoria_orange"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/light_orange" />
+            android:background="@drawable/filter_chips_background"
+            android:backgroundTint="@color/light_orange"
+            android:clickable="true"
+            android:focusable="true" />
 
         <Button
             android:id="@+id/set_color_categoria_ocean_blue"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/ocean_blue" />
+            android:background="@drawable/filter_chips_background"
+            android:backgroundTint="@color/ocean_blue"
+            android:clickable="true"
+            android:focusable="true" />
 
         <!-- Adicione mais botões conforme necessário -->
     </LinearLayout>
@@ -106,7 +127,7 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button_bg"
         android:fontFamily="@font/leonardo"
-        android:text="Criar categoria"
+        android:text="Criar"
         android:textSize="17sp"
         android:textStyle="bold" />
 
