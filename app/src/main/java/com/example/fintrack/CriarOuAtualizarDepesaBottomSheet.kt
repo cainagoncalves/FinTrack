@@ -26,7 +26,7 @@ class CriarOuAtualizarDespesaBottomSheet(
 
     ) : BottomSheetDialogFragment() {
 
-    @SuppressLint("MissingInflatedId", "LongLogTag")
+    @SuppressLint("MissingInflatedId", "LongLogTag", "ResourceAsColor")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,6 +65,7 @@ class CriarOuAtualizarDespesaBottomSheet(
             tieNomeDespesa.setText(despesa.nome)
             tieValorDespesa.setText(despesa.valor)
             btnDeletarDespesa.isVisible = true
+
         }
 
         btnDeletarDespesa.setOnClickListener {

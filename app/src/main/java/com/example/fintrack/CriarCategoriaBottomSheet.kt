@@ -82,17 +82,17 @@ class CriarCategoriaBottomSheet(
 
     private fun getCategoria(listaCategoria: MutableList<CategoriaUi>) {
         listaCategoria.apply {
-            add(CategoriaUi(R.drawable.ic_home, false))
-            add(CategoriaUi(R.drawable.ic_key, false))
-            add(CategoriaUi(R.drawable.ic_wifi, false))
-            add(CategoriaUi(R.drawable.ic_clothes, false))
-            add(CategoriaUi(R.drawable.ic_electricity, false))
-            add(CategoriaUi(R.drawable.ic_car, false))
-            add(CategoriaUi(R.drawable.ic_credit_card, false))
-            add(CategoriaUi(R.drawable.ic_shopping_cart, false))
-            add(CategoriaUi(R.drawable.ic_water_drop, false))
-            add(CategoriaUi(R.drawable.ic_gas_station, false))
-            add(CategoriaUi(R.drawable.ic_game_control, false))
+            add(CategoriaUi(0, R.drawable.ic_home, false))
+            add(CategoriaUi(0, R.drawable.ic_key, false))
+            add(CategoriaUi(0, R.drawable.ic_wifi, false))
+            add(CategoriaUi(0, R.drawable.ic_clothes, false))
+            add(CategoriaUi(0, R.drawable.ic_electricity, false))
+            add(CategoriaUi(0, R.drawable.ic_car, false))
+            add(CategoriaUi(0, R.drawable.ic_credit_card, false))
+            add(CategoriaUi(0, R.drawable.ic_shopping_cart, false))
+            add(CategoriaUi(0, R.drawable.ic_water_drop, false))
+            add(CategoriaUi(0, R.drawable.ic_gas_station, false))
+            add(CategoriaUi(0, R.drawable.ic_game_control, false))
         }
     }
 

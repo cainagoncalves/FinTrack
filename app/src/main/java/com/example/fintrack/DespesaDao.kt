@@ -25,4 +25,10 @@ interface DespesaDao {
 
     @Delete
     fun delete (despesaEntity: DespesaEntity)
+
+    @Query("Select * From despesaentity where categoria is :categoriaIcon")
+    fun getAllByCategoriaIcon(categoriaIcon: Int): List<DespesaEntity>
+
+    @Delete
+    fun deleteAll (despesaEntity: List<DespesaEntity>)
 }

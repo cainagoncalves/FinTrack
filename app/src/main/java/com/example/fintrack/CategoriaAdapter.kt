@@ -16,10 +16,18 @@ class CategoriaAdapter :
         throw IllegalArgumentException("onClick not initialized")
     }
 
+    private var onLongClick: (CategoriaUi) -> Unit = {
+        throw IllegalArgumentException("onClick not initialized")
+    }
+
     private var selectedPosition = RecyclerView.NO_POSITION
 
     fun setOnItemClickListener(onClick: (CategoriaUi) -> Unit) {
         this.onClick = onClick
+    }
+
+    fun setOnLonglickListener(onLongClick: (CategoriaUi) -> Unit) {
+        this.onLongClick = onLongClick
     }
 
     // Cria um view holder
@@ -32,14 +40,19 @@ class CategoriaAdapter :
     // Atrela o dado com a UI views
     override fun onBindViewHolder(holder: CategoriaViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, onClick, position)
+        holder.bind(item, onClick, position, onLongClick)
     }
 
     // View que segura os dados
     inner class CategoriaViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         private val btnCategoria = view.findViewById<ImageView>(R.id.icon_categoria)
 
-        fun bind(categoria: CategoriaUi, onClick: (CategoriaUi) -> Unit, position: Int) {
+        fun bind(
+            categoria: CategoriaUi,
+            onClick: (CategoriaUi) -> Unit,
+            position: Int,
+            onLongClickListener: (CategoriaUi) -> Unit
+        ) {
             btnCategoria.setImageResource(categoria.iconeCategoria)
             btnCategoria.isSelected = categoria.isSelected
 
@@ -53,6 +66,12 @@ class CategoriaAdapter :
                 notifyItemChanged(previousPosition)
                 notifyItemChanged(selectedPosition)
                 onClick.invoke(categoria)
+
+            }
+
+            view.setOnLongClickListener {
+                onLongClickListener.invoke(categoria)
+                true
             }
         }
     }

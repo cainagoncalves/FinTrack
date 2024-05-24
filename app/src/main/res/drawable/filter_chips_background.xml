@@ -6,7 +6,6 @@
             <solid android:color="@color/cinza" />
             <corners android:radius="20dp" />
         </shape>
-        <color android:color="@android:color/white"/>
     </item>
 
     <!-- Not selected state -->
@@ -16,6 +15,5 @@
             <solid android:color="@color/black"></solid>
             <stroke android:width="2dp" />
         </shape>
-        <color android:color="@color/cinza"/>
     </item>
 </selector>

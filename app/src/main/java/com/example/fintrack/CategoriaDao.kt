@@ -1,6 +1,7 @@
 package com.example.fintrack
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -17,4 +18,7 @@ interface CategoriaDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(categoriaEntity: CategoriaEntity)
+
+    @Delete
+    fun delete(categoriaEntity: CategoriaEntity)
 }

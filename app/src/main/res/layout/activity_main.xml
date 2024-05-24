@@ -26,6 +26,7 @@
         android:fontFamily="@font/leonardo"
         android:paddingStart="8dp"
         android:text="@string/app_name"
+        android:textStyle="bold"
         android:textColor="@color/app_financa2"
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
