@@ -62,9 +62,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Configurando longoClick para deletar categorias
-        categoriaAdapter.setOnLonglickListener { categoriaAserDeletada ->
+        categoriaAdapter.setOnLongClickListener { categoriaAserDeletada ->
             // Configurando a caixa de informação ao deletar categoria
-            if (categoriaAserDeletada.cor != R.drawable.ic_add) {
+            if (categoriaAserDeletada.iconeCategoria != R.drawable.ic_add && categoriaAserDeletada.iconeCategoria != R.drawable.ic_add_all) {
                 val title: String = this.getString(R.string.deletar_categoria_title)
                 val descricao: String = this.getString(R.string.deletar_categoria_descricao)
                 val btnText: String = this.getString(R.string.delete)
@@ -87,44 +87,48 @@ class MainActivity : AppCompatActivity() {
 
         // Configurar botão para abrir CriarCategoriaBottomSheet
         categoriaAdapter.setOnItemClickListener { selected ->
-                if (selected.iconeCategoria == R.drawable.ic_add) {
-                    val criarCategoriaBottomSheet =
-                        CriarCategoriaBottomSheet { idCategoria, iconeCategoria, corCategoria ->
-                            val categoriaEntity = CategoriaEntity(
-                                id = idCategoria,
-                                iconeCategoria = iconeCategoria,
-                                isSelected = false,
-                                cor = corCategoria
-                            )
-                            insertCategorias(categoriaEntity)
-                        }
-                    criarCategoriaBottomSheet.show(
-                        supportFragmentManager,
-                        "criarCategoriaBottomSheet"
-                    )
-                } else {
-                    val categoriaTemp = listaCategoria.map { item ->
-                        when {
-                            item.iconeCategoria == selected.iconeCategoria && !item.isSelected -> item.copy(
-                                isSelected = true
-                            )
+            if (selected.iconeCategoria == R.drawable.ic_add) {
+                val criarCategoriaBottomSheet =
+                    CriarCategoriaBottomSheet { idCategoria, iconeCategoria, corCategoria ->
+                        val categoriaEntity = CategoriaEntity(
+                            id = idCategoria,
+                            iconeCategoria = iconeCategoria,
+                            isSelected = false,
+                            cor = corCategoria
+                        )
+                        insertCategorias(categoriaEntity)
+                    }
+                criarCategoriaBottomSheet.show(
+                    supportFragmentManager,
+                    "criarCategoriaBottomSheet"
+                )
+            } else {
+                val categoriaTemp = listaCategoria.map { item ->
+                    when {
+                        item.iconeCategoria == selected.iconeCategoria && item.isSelected -> item.copy(
+                            isSelected = true
+                        )
 
-                            item.iconeCategoria == selected.iconeCategoria && item.isSelected -> item.copy(
-                                isSelected = false
-                            )
+                        item.iconeCategoria == selected.iconeCategoria && !item.isSelected -> item.copy(
+                            isSelected = true
+                        )
 
-                            else -> item
+                        item.iconeCategoria != selected.iconeCategoria && item.isSelected -> item.copy(
+                            isSelected = false
+                        )
+
+                        else -> item
+                    }
+                }
+                    if (selected.iconeCategoria != R.drawable.ic_add_all) {
+                        filterDespesaPelaCategoriaIcon(selected.iconeCategoria)
+                    } else {
+                        GlobalScope.launch(Dispatchers.IO) {
+                            getDespesasFromDataBase()
                         }
                     }
-                    val despesaTemp =
-                        if (selected.iconeCategoria != R.drawable.ic_add) {
-                            listaDespesa.filter { it.categoria == selected.iconeCategoria }
-                        } else {
-                            listaDespesa
-                        }
-                    despesaAdapter.submitList(despesaTemp)
-                    categoriaAdapter.submitList(categoriaTemp)
-                }
+                categoriaAdapter.submitList(categoriaTemp)
+            }
         }
 
         // Exibe as categorias selecionadas na view
@@ -179,10 +183,21 @@ class MainActivity : AppCompatActivity() {
                 cor = R.color.white
             )
         )
+
+        val categoriaListTemp = mutableListOf(
+            CategoriaUi(
+                id = 0,
+                iconeCategoria = R.drawable.ic_add_all,
+                isSelected = true,
+                cor = R.color.white
+            )
+        )
+
+        categoriaListTemp.addAll(categoriasUiData)
         // Ajuda a não dar erro, pois para não dar erro precisa ir para a Main thread
         GlobalScope.launch(Dispatchers.Main) {
-            listaCategoria = categoriasUiData
-            categoriaAdapter.submitList(categoriasUiData)
+            listaCategoria = categoriaListTemp
+            categoriaAdapter.submitList(listaCategoria)
         }
     }
 
@@ -234,13 +249,35 @@ class MainActivity : AppCompatActivity() {
 
     private fun deleteCategoria(categoriaEntity: CategoriaEntity) {
         GlobalScope.launch(Dispatchers.IO) {
-            val despesasASeremDeletadas = despesaDao.getAllByCategoriaIcon(categoriaEntity.iconeCategoria)
+            val despesasASeremDeletadas =
+                despesaDao.getAllByCategoriaIcon(categoriaEntity.iconeCategoria)
             despesaDao.deleteAll(despesasASeremDeletadas)
             categoriaDao.delete(categoriaEntity)
             getCategoriasFromDataBase()  // Atualiza a lista de categoria na UI
             getDespesasFromDataBase()
         }
     }
+
+    private fun filterDespesaPelaCategoriaIcon(categoria: Int) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val despesasFromDb: List<DespesaEntity> = despesaDao.getAllByCategoriaIcon(categoria)
+            val despesasUi: List<DespesaUi> = despesasFromDb.map {
+                DespesaUi(
+                    id = it.id,
+                    nome = it.nome,
+                    valor = it.valor,
+                    categoria = it.categoria,
+                    cor = it.cor
+                )
+            }
+
+            //Ajuda a não dar erro, pois para não dar erro precisar ir para a Main thread
+            GlobalScope.launch(Dispatchers.Main) {
+                despesaAdapter.submitList(despesasUi)
+            }
+        }
+    }
+
 
     private fun showCriarAtualizarDespesaBottomSheet(despesaUi: DespesaUi? = null) {
         val createDespesaBottomSheet = CriarOuAtualizarDespesaBottomSheet(

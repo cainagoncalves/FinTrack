@@ -17,7 +17,7 @@ class CategoriaAdapter :
     }
 
     private var onLongClick: (CategoriaUi) -> Unit = {
-        throw IllegalArgumentException("onClick not initialized")
+        throw IllegalArgumentException("onLongClick not initialized")
     }
 
     private var selectedPosition = RecyclerView.NO_POSITION
@@ -26,14 +26,18 @@ class CategoriaAdapter :
         this.onClick = onClick
     }
 
-    fun setOnLonglickListener(onLongClick: (CategoriaUi) -> Unit) {
+    fun setOnLongClickListener(onLongClick: (CategoriaUi) -> Unit) { // Correção aqui
         this.onLongClick = onLongClick
+    }
+
+    fun setSelectedCategory(category: CategoriaUi?) {
+        selectedPosition = if (category == null) RecyclerView.NO_POSITION else currentList.indexOf(category)
+        notifyDataSetChanged()
     }
 
     // Cria um view holder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoriaViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_categoria, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_categoria, parent, false)
         return CategoriaViewHolder(view)
     }
 
@@ -54,19 +58,23 @@ class CategoriaAdapter :
             onLongClickListener: (CategoriaUi) -> Unit
         ) {
             btnCategoria.setImageResource(categoria.iconeCategoria)
-            btnCategoria.isSelected = categoria.isSelected
+            btnCategoria.isSelected = position == selectedPosition
 
-            // Change appearance if the item is selected
-            view.isSelected = (position == selectedPosition)
+            // Adiciona um listener ao botão para atualizar a seleção imediatamente
+            btnCategoria.setOnClickListener {
+                // Verifica se a mesma categoria foi clicada novamente
+                val isSameCategoryClicked = position == selectedPosition
 
-            view.setOnClickListener {
-                // Update selected position and notify changes
-                val previousPosition = selectedPosition
-                selectedPosition = adapterPosition
-                notifyItemChanged(previousPosition)
-                notifyItemChanged(selectedPosition)
+                // Atualiza a seleção apenas se for uma categoria diferente
+                if (!isSameCategoryClicked) {
+                    val previousPosition = selectedPosition
+                    selectedPosition = position
+                    notifyItemChanged(previousPosition)
+                    notifyItemChanged(selectedPosition)
+                }
+
+                // Invoca o listener onClick passando o item clicado
                 onClick.invoke(categoria)
-
             }
 
             view.setOnLongClickListener {
@@ -86,5 +94,4 @@ class CategoriaAdapter :
             return oldItem.iconeCategoria == newItem.iconeCategoria
         }
     }
-
 }

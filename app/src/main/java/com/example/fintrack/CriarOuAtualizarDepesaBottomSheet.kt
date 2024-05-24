@@ -16,7 +16,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 
-
 class CriarOuAtualizarDespesaBottomSheet(
     private val categoriaList: List<CategoriaUi>,
     private val despesa: DespesaUi? = null,
@@ -24,7 +23,9 @@ class CriarOuAtualizarDespesaBottomSheet(
     private val onUpdateClicked: (DespesaUi) -> Unit,
     private val onDeleteClicked: (DespesaUi) -> Unit
 
-    ) : BottomSheetDialogFragment() {
+) : BottomSheetDialogFragment() {
+
+    private val iconsToHide = listOf(R.drawable.ic_add, R.drawable.ic_add_all)
 
     @SuppressLint("MissingInflatedId", "LongLogTag", "ResourceAsColor")
     override fun onCreateView(
@@ -32,6 +33,8 @@ class CriarOuAtualizarDespesaBottomSheet(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val filteredCategoriaList = categoriaList.filter { it.iconeCategoria !in iconsToHide }
+
         val view =
             inflater.inflate(R.layout.create_or_update_despesa_bottom_sheet, container, false)
 
@@ -48,7 +51,7 @@ class CriarOuAtualizarDespesaBottomSheet(
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val categoriaAdapter = CategoriaAdapter()
         rvCategoriaDespesa.adapter = categoriaAdapter
-        categoriaAdapter.submitList(categoriaList.toMutableList())
+        categoriaAdapter.submitList(filteredCategoriaList.toMutableList())
 
         categoriaAdapter.setOnItemClickListener { categoria ->
             categoriaSelecionada = categoria
@@ -66,10 +69,14 @@ class CriarOuAtualizarDespesaBottomSheet(
             tieValorDespesa.setText(despesa.valor)
             btnDeletarDespesa.isVisible = true
 
+            // Seleciona a categoria vinculada à despesa
+            val categoria = categoriaList.find { it.iconeCategoria == despesa.categoria }
+            categoriaSelecionada = categoria
+            categoriaAdapter.setSelectedCategory(categoria)
         }
 
         btnDeletarDespesa.setOnClickListener {
-            if(despesa != null){
+            if (despesa != null) {
                 onDeleteClicked.invoke(despesa)
                 dismiss()
             } else {
@@ -79,8 +86,8 @@ class CriarOuAtualizarDespesaBottomSheet(
 
         btnAdicionarOuAtualizarDespesa.setOnClickListener {
             val nome = tieNomeDespesa.text.toString().trim()
-            val valor = tieValorDespesa.text.toString()
-            if (categoriaSelecionada != null || nome.isEmpty() || valor.isEmpty()) {
+            val valor = tieValorDespesa.text.toString().trim()
+            if (categoriaSelecionada != null && nome.isNotEmpty() && valor.isNotEmpty()) {
 
                 if (despesa == null) {
                     onCreateClicked.invoke(
@@ -105,11 +112,7 @@ class CriarOuAtualizarDespesaBottomSheet(
                 }
                 dismiss()
             } else {
-                Snackbar.make(
-                    btnAdicionarOuAtualizarDespesa,
-                    "Por favor, preencha todos os campos e selecione uma categoria.",
-                    Snackbar.LENGTH_LONG
-                ).show()
+                Snackbar.make(btnAdicionarOuAtualizarDespesa, "Por favor, preencha todos os campos e selecione uma categoria.", Snackbar.LENGTH_LONG).show()
             }
         }
 
@@ -123,7 +126,11 @@ class CriarOuAtualizarDespesaBottomSheet(
         }
 
         return view
+
     }
+
+
+
 
     interface OnDespesaCreatedListener {
         fun onDespesaCreated(despesa: DespesaUi)
