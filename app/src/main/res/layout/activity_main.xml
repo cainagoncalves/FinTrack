@@ -71,7 +71,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tv_categorias"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
@@ -94,18 +94,18 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/tv_categorias"
         tools:ignore="MissingConstraints"
         tools:listitem="@layout/item_categoria" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/tv_despesas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/leonardo"
-        android:text="Últimas Transações"
+        android:text="Despesas"
         android:textColor="@color/app_financa2"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -126,9 +126,55 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_adicionar_despesa"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/tv_despesas"
         tools:ignore="MissingConstraints"
         tools:listitem="@layout/item_despesa" />
+
+    <LinearLayout
+        android:id="@+id/ll_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/leonardo"
+            android:gravity="center"
+            android:text="@string/deletar_categoria_title"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/agrandir"
+            android:gravity="center"
+            android:text="@string/categoria_vazia_descricao"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="250dp"
+            android:src="@drawable/ic_empty_list" />
+
+        <Button
+            android:id="@+id/btn_adicionar_vazio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/leonardo"
+            android:textSize="17sp"
+            android:textColor="@color/white"
+            style="@style/CustomButton"
+            android:textStyle="bold"
+            android:text="@string/add" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_adicionar_despesa"
@@ -141,7 +187,9 @@
         android:fontFamily="@font/leonardo"
         android:text="Adicionar despesa"
         android:textSize="17sp"
+        android:textColor="@color/white"
         android:textStyle="bold"
+        style="@style/CustomButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

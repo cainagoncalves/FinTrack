@@ -64,6 +64,18 @@
             android:background="@drawable/filter_chips_background"
             android:backgroundTint="@color/water_blue"
             android:clickable="true"
+            style="@style/CustomButton_set_color_categoria_blue"
+            android:focusable="true" />
+
+        <Button
+            android:id="@+id/set_color_categoria_red"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/filter_chips_background"
+            android:backgroundTint="@color/red"
+            style="@style/CustomButton_set_color_categoria_red"
+            android:clickable="true"
             android:focusable="true" />
 
         <Button
@@ -72,17 +84,8 @@
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/filter_chips_background"
-            android:backgroundTint="@color/red"
-            android:clickable="true"
-            android:focusable="true" />
-
-        <Button
-            android:id="@+id/set_color_categoria_brown"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/filter_chips_background"
             android:backgroundTint="@color/green"
+            style="@style/CustomButton_set_color_categoria_green"
             android:clickable="true"
             android:focusable="true" />
 
@@ -93,6 +96,7 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/filter_chips_background"
             android:backgroundTint="@color/medium_yellow"
+            style="@style/CustomButton_set_color_categoria_yellow"
             android:clickable="true"
             android:focusable="true" />
 
@@ -103,16 +107,18 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/filter_chips_background"
             android:backgroundTint="@color/light_orange"
+            style="@style/CustomButton_set_color_categoria_orange"
             android:clickable="true"
             android:focusable="true" />
 
         <Button
-            android:id="@+id/set_color_categoria_ocean_blue"
+            android:id="@+id/set_color_categoria_black"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/filter_chips_background"
             android:backgroundTint="@color/black"
+            style="@style/CustomButton_set_color_categoria_black"
             android:clickable="true"
             android:focusable="true" />
 
@@ -126,8 +132,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        style="@style/CustomButton"
         android:background="@drawable/button_bg"
         android:fontFamily="@font/leonardo"
+        android:textColor="@color/white"
         android:text="Criar"
         android:textSize="17sp"
         android:textStyle="bold" />

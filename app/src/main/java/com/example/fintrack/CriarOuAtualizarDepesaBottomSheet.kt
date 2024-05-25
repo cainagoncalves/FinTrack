@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 
 class CriarOuAtualizarDespesaBottomSheet(
-    private val categoriaList: List<CategoriaUi>,
+    private val categoriaList: List<CategoriaEntity>, // Alteração aqui
     private val despesa: DespesaUi? = null,
     private val onCreateClicked: (DespesaUi) -> Unit,
     private val onUpdateClicked: (DespesaUi) -> Unit,
@@ -52,7 +52,7 @@ class CriarOuAtualizarDespesaBottomSheet(
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val categoriaAdapter = CategoriaAdapter()
         rvCategoriaDespesa.adapter = categoriaAdapter
-        categoriaAdapter.submitList(filteredCategoriaList.toMutableList())
+        categoriaAdapter.submitList(convertToCategoriaUiList(filteredCategoriaList)) // Alteração aqui
 
         categoriaAdapter.setOnItemClickListener { categoria ->
             categoriaSelecionada = categoria
@@ -72,8 +72,8 @@ class CriarOuAtualizarDespesaBottomSheet(
 
             // Seleciona a categoria vinculada à despesa
             val categoria = categoriaList.find { it.iconeCategoria == despesa.categoria }
-            categoriaSelecionada = categoria
-            categoriaAdapter.setSelectedCategory(categoria)
+            categoriaSelecionada = categoria?.let { convertToCategoriaUiList(listOf(it)).firstOrNull() }
+            categoriaAdapter.setSelectedCategory(categoriaSelecionada)
         }
 
         btnDeletarDespesa.setOnClickListener {
@@ -115,7 +115,7 @@ class CriarOuAtualizarDespesaBottomSheet(
             } else {
                 Snackbar.make(
                     btnAdicionarOuAtualizarDespesa,
-                    "Por favor, preencha todos os campos e selecione uma categoria.",
+                    "Por favor, preencha todos os campos e selecione uma categoria",
                     Snackbar.LENGTH_LONG
                 ).show()
             }
@@ -134,8 +134,14 @@ class CriarOuAtualizarDespesaBottomSheet(
 
     }
 
-
-    interface OnDespesaCreatedListener {
-        fun onDespesaCreated(despesa: DespesaUi)
+    private fun convertToCategoriaUiList(categoriasFromDb: List<CategoriaEntity>): List<CategoriaUi> {
+        return categoriasFromDb.map {
+            CategoriaUi(
+                id = it.id,
+                iconeCategoria = it.iconeCategoria,
+                isSelected = it.isSelected,
+                cor = it.cor
+            )
+        }
     }
 }

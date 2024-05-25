@@ -52,6 +52,8 @@
             android:layout_marginStart="8dp"
             android:background="@drawable/button_bg"
             android:fontFamily="@font/leonardo"
+            android:textColor="@color/white"
+            style="@style/CustomButton"
             android:text="@string/delete"
             android:textSize="17sp"
             android:textStyle="bold" />

@@ -1,11 +1,102 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.FinTrack" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Base.Theme.FinTrack" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="android:statusBarColor">@color/background_color</item>
 
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Customize button colors -->
+        <item name="colorButtonNormal">@color/green</item>
+        <item name="colorControlHighlight">@color/green</item>
+        <item name="colorControlActivated">@color/green</item>
+        <item name="colorAccent">@color/green</item>
+        <item name="android:colorAccent">@color/green</item>
+
+        <!-- Button styles for Material3 -->
+        <item name="buttonStyle">@style/CustomButton</item>
+        <item name="materialButtonStyle">@style/CustomButton</item>
+        <item name="materialButtonOutlinedStyle">@style/CustomOutlinedButton</item>
     </style>
 
     <style name="Theme.FinTrack" parent="Base.Theme.FinTrack" />
+
+    <!-- Button color -->
+    <style name="CustomButton_set_color_categoria_blue" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/water_blue</item>
+        <item name="rippleColor">@color/water_blue</item>
+        <item name="android:backgroundTint">@color/water_blue</item>
+        <item name="android:textColor">#FFFFFF</item> <!-- Ajuste conforme necessário -->
+    </style>
+
+    <style name="CustomButton_set_color_categoria_red" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/red</item>
+        <item name="rippleColor">@color/red</item>
+        <item name="android:backgroundTint">@color/red</item>
+        <item name="android:textColor">#FFFFFF</item> <!-- Ajuste conforme necessário -->
+    </style>
+
+    <style name="CustomButton_set_color_categoria_green" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/green</item>
+        <item name="rippleColor">@color/green</item>
+        <item name="android:backgroundTint">@color/green</item>
+        <item name="android:textColor">#FFFFFF</item> <!-- Ajuste conforme necessário -->
+    </style>
+
+    <style name="CustomButton_set_color_categoria_yellow" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/medium_yellow</item>
+        <item name="rippleColor">@color/medium_yellow</item>
+        <item name="android:backgroundTint">@color/medium_yellow</item>
+        <item name="android:textColor">#FFFFFF</item> <!-- Ajuste conforme necessário -->
+    </style>
+
+    <style name="CustomButton_set_color_categoria_orange" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/light_orange</item>
+        <item name="rippleColor">@color/light_orange</item>
+        <item name="android:backgroundTint">@color/light_orange</item>
+        <item name="android:textColor">#FFFFFF</item> <!-- Ajuste conforme necessário -->
+    </style>
+
+    <style name="CustomButton_set_color_categoria_black" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/black</item>
+        <item name="rippleColor">@color/black</item>
+        <item name="android:backgroundTint">@color/black</item>
+        <item name="android:textColor">#FFFFFF</item> <!-- Ajuste conforme necessário -->
+    </style>
+
+    <!-- Custom button style -->
+    <style name="CustomButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/green</item>
+        <item name="rippleColor">@color/green</item>
+        <item name="android:backgroundTint">@color/green</item>
+    </style>
+
+    <!-- Custom text button style -->
+    <style name="CustomTextButton" parent="Widget.Material3.Button.TextButton">
+        <item name="backgroundTint">@color/green</item>
+        <item name="rippleColor">@color/green</item>
+        <item name="android:backgroundTint">@color/green</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Custom outlined button style -->
+    <style name="CustomOutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="backgroundTint">@color/green</item>
+        <item name="rippleColor">@color/green</item>
+        <item name="android:backgroundTint">@color/green</item>
+        <item name="android:textColor">@color/green</item>
+        <item name="strokeColor">@color/green</item>
+        <item name="android:strokeColor">@color/green</item>
+    </style>
+
+    <style name="CustomSnackbar" parent="Widget.Material3.Snackbar">
+        <!-- Personalize as cores do Snackbar conforme desejado -->
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textAppearance">@style/TextAppearance.CustomSnackbar</item>
+        <!-- Outros atributos conforme necessário -->
+    </style>
+
+    <style name="TextAppearance.CustomSnackbar" parent="TextAppearance.AppCompat.Body2">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 </resources>

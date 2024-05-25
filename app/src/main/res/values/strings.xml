@@ -8,4 +8,7 @@
     <string name="delete">Deletar</string>
     <string name="deletar_categoria_title">Atenção!</string>
     <string name="deletar_categoria_descricao">Ao deletar uma categoria, você irá deletar também todas as tarefas vinculadas a esta categoria, você tem certeza?</string>
+    <string name="categoria_vazia_title">Nenhuma categoria encontrada!</string>
+    <string name="categoria_vazia_descricao">Por favor, adicione uma categoria nova</string>
+
 </resources>

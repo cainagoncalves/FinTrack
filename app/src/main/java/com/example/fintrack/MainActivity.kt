@@ -1,9 +1,14 @@
 package com.example.fintrack
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -14,7 +19,17 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private var listaCategoria = listOf<CategoriaUi>()
+    private var categoriaEntity = listOf<CategoriaEntity>()
     private var listaDespesa = listOf<DespesaUi>()
+
+    private lateinit var rvCategoria: RecyclerView
+    private lateinit var rvDespesa: RecyclerView
+    private lateinit var ctnCategoriaVazia: LinearLayout
+    private lateinit var criarDespesa: Button
+    private lateinit var tvCategorias: TextView
+    private lateinit var tvDespesas: TextView
+    private lateinit var ctnValorTotal: LinearLayout
+
 
     private lateinit var categoriaAdapter: CategoriaAdapter
     private val despesaAdapter by lazy {
@@ -37,21 +52,38 @@ class MainActivity : AppCompatActivity() {
         db.getDespesaDao()
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        //TV despesa e categoria
+        tvDespesas = findViewById(R.id.tv_despesas)
+        tvCategorias = findViewById(R.id.tv_categorias)
+        ctnValorTotal = findViewById(R.id.container_layout)
+
         // Configurar RecyclerView de categorias
-        val rvCategoria = findViewById<RecyclerView>(R.id.rv_categoria)
+        rvCategoria = findViewById(R.id.rv_categoria)
         categoriaAdapter = CategoriaAdapter()
         rvCategoria.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
+        // Rv de estado vazio
+        ctnCategoriaVazia = findViewById(R.id.ll_empty_view)
+
         // Configurar RecyclerView de despesas
-        val rvDespesa = findViewById<RecyclerView>(R.id.rv_despesa)
+        rvDespesa = findViewById(R.id.rv_despesa)
         rvDespesa.layoutManager = LinearLayoutManager(this)
 
+        // Dar ação ao botão de vazio
+        val btnCreateEmpty = findViewById<Button>(R.id.btn_adicionar_vazio)
+
+        btnCreateEmpty.setOnClickListener {
+            mostrarBtnCriarCategoriaSheet()
+        }
+
         // Chamar botão para criar despesas
-        val criarDespesa = findViewById<Button>(R.id.btn_adicionar_despesa)
+        criarDespesa = findViewById(R.id.btn_adicionar_despesa)
 
         criarDespesa.setOnClickListener {
             showCriarAtualizarDespesaBottomSheet()
@@ -89,20 +121,7 @@ class MainActivity : AppCompatActivity() {
         // Configurar botão para abrir CriarCategoriaBottomSheet
         categoriaAdapter.setOnItemClickListener { selected ->
             if (selected.iconeCategoria == R.drawable.ic_add) {
-                val criarCategoriaBottomSheet =
-                    CriarCategoriaBottomSheet { idCategoria, iconeCategoria, corCategoria ->
-                        val categoriaEntity = CategoriaEntity(
-                            id = idCategoria,
-                            iconeCategoria = iconeCategoria,
-                            isSelected = false,
-                            cor = corCategoria
-                        )
-                        insertCategorias(categoriaEntity)
-                    }
-                criarCategoriaBottomSheet.show(
-                    supportFragmentManager,
-                    "criarCategoriaBottomSheet"
-                )
+                mostrarBtnCriarCategoriaSheet()
             } else {
                 val categoriaTemp = listaCategoria.map { item ->
                     when {
@@ -170,8 +189,31 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    // Define o estado de vazio do app
     private fun getCategoriasFromDataBase() {
         val categoriasFromDb: List<CategoriaEntity> = categoriaDao.getAll()
+        categoriaEntity = categoriasFromDb
+        GlobalScope.launch(Dispatchers.Main){
+            if(categoriaEntity.isEmpty() || !this@MainActivity.hasResource(R.drawable.ic_add) ||
+                !this@MainActivity.hasResource(R.drawable.ic_add_all)){
+                rvCategoria.isVisible = false
+                rvDespesa.isVisible = false
+                criarDespesa.isVisible = false
+                tvCategorias.isVisible = false
+                tvDespesas.isVisible = false
+                ctnValorTotal.isVisible = false
+                ctnCategoriaVazia.isVisible = true
+            } else {
+                rvCategoria.isVisible = true
+                rvDespesa.isVisible = true
+                criarDespesa.isVisible = true
+                tvCategorias.isVisible = true
+                tvDespesas.isVisible = true
+                ctnValorTotal.isVisible = true
+                ctnCategoriaVazia.isVisible = false
+            }
+        }
+
         val categoriasUiData = categoriasFromDb.map {
             CategoriaUi(
                 id = it.id,
@@ -206,6 +248,42 @@ class MainActivity : AppCompatActivity() {
             listaCategoria = categoriaListTemp
             categoriaAdapter.submitList(listaCategoria)
         }
+    }
+
+    private fun atualizarListaDeCategorias(categoriasFromDb: List<CategoriaEntity>) {
+        val categoriasUiData = categoriasFromDb.map {
+            CategoriaUi(
+                id = it.id,
+                iconeCategoria = it.iconeCategoria,
+                isSelected = it.isSelected,
+                cor = it.cor
+            )
+        }.toMutableList()
+
+        // Add fake + category
+        categoriasUiData.add(
+            CategoriaUi(
+                id = 0,
+                iconeCategoria = R.drawable.ic_add,
+                isSelected = false,
+                cor = R.color.white
+            )
+        )
+
+        val categoriaListTemp = mutableListOf(
+            CategoriaUi(
+                id = 0,
+                iconeCategoria = R.drawable.ic_add_all,
+                isSelected = true,
+                cor = R.color.white
+            )
+        )
+
+        categoriaListTemp.addAll(categoriasUiData)
+
+        // Atualizar a lista de categorias e notificar o adaptador
+        listaCategoria = categoriaListTemp
+        categoriaAdapter.submitList(listaCategoria)
     }
 
     private fun getDespesasFromDataBase() {
@@ -291,7 +369,7 @@ class MainActivity : AppCompatActivity() {
     private fun showCriarAtualizarDespesaBottomSheet(despesaUi: DespesaUi? = null) {
         val createDespesaBottomSheet = CriarOuAtualizarDespesaBottomSheet(
             despesa = despesaUi,
-            categoriaList = listaCategoria,
+            categoriaList = categoriaEntity,
             onCreateClicked = { despesaAserCriada ->
                 val despesaEntityToBeInsert = DespesaEntity(
                     id = despesaAserCriada.id,
@@ -338,5 +416,31 @@ class MainActivity : AppCompatActivity() {
     private fun atualizarDespesasTotais(total: Double) {
         val valorSaldoTextView = findViewById<TextView>(R.id.valor_saldo)
         valorSaldoTextView.text = String.format("R$ %.2f", total)
+    }
+
+    private fun mostrarBtnCriarCategoriaSheet(){
+        val criarCategoriaBottomSheet =
+            CriarCategoriaBottomSheet { idCategoria, iconeCategoria, corCategoria ->
+                val categoriaEntity = CategoriaEntity(
+                    id = idCategoria,
+                    iconeCategoria = iconeCategoria,
+                    isSelected = false,
+                    cor = corCategoria
+                )
+                insertCategorias(categoriaEntity)
+            }
+        criarCategoriaBottomSheet.show(
+            supportFragmentManager,
+            "criarCategoriaBottomSheet"
+        )
+    }
+
+    private fun Context.hasResource(resourceId: Int): Boolean {
+        return try {
+            resources.getResourceName(resourceId)
+            true
+        } catch (e: Resources.NotFoundException) {
+            false
+        }
     }
 }

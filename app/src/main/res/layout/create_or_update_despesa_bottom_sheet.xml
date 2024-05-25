@@ -33,7 +33,7 @@
         android:fontFamily="@font/leonardo"
         android:textColor="@color/app_financa2"
         android:textColorHint="@color/text_hint"
-        android:inputType="text|textCapWords"
+        android:inputType="textCapSentences"
         android:orientation="horizontal"
         tools:listitem="@layout/item_despesa" />
 
@@ -93,6 +93,8 @@
             android:layout_weight="1"
             android:background="@drawable/button_bg"
             android:fontFamily="@font/leonardo"
+            android:textColor="@color/white"
+            style="@style/CustomButton"
             android:text="@string/add_despesa_title"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -103,6 +105,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:textColor="@color/white"
+            style="@style/CustomButton"
             android:layout_weight="1"
             android:background="@drawable/button_bg"
             android:fontFamily="@font/leonardo"

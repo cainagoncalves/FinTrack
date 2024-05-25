@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 
 class CriarCategoriaBottomSheet(
     private val onCreateClicked: (idCategoria: Long, iconeCategoria: Int, corCategoria: Int) -> Unit
@@ -30,11 +31,11 @@ class CriarCategoriaBottomSheet(
         val rvCriarCategoria = view.findViewById<RecyclerView>(R.id.rv_criar_categoria)
         val colorButtons = listOf(
             view.findViewById<Button>(R.id.set_color_categoria_blue),
+            view.findViewById(R.id.set_color_categoria_red),
             view.findViewById(R.id.set_color_categoria_green),
-            view.findViewById(R.id.set_color_categoria_brown),
             view.findViewById(R.id.set_color_categoria_yellow),
             view.findViewById(R.id.set_color_categoria_orange),
-            view.findViewById(R.id.set_color_categoria_ocean_blue)
+            view.findViewById(R.id.set_color_categoria_black)
         )
         rvCriarCategoria.layoutManager = LinearLayoutManager(context).apply {
             orientation = LinearLayoutManager.HORIZONTAL
@@ -62,11 +63,16 @@ class CriarCategoriaBottomSheet(
         }
 
         btnCreate.setOnClickListener {
-            selectedCategoria?.let { categoria ->
-                val idCategoria = System.currentTimeMillis() // Exemplo para gerar um ID único
-                onCreateClicked(idCategoria, categoria.iconeCategoria, selectedColor)
-                dismiss()
+            if( selectedCategoria == null || selectedButton == null) {
+                Snackbar.make(btnCreate, "Por favor, selecione um ícone e uma cor para a categoria", Snackbar.LENGTH_LONG).show()
+            } else {
+                selectedCategoria?.let { categoria ->
+                    val idCategoria = System.currentTimeMillis() // Exemplo para gerar um ID único
+                    onCreateClicked(idCategoria, categoria.iconeCategoria, selectedColor)
+                    dismiss()
+                }
             }
+
         }
 
         dialog?.setOnShowListener { dialog ->
