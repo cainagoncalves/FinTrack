@@ -38,7 +38,8 @@ class CriarOuAtualizarDespesaBottomSheet(
         val view =
             inflater.inflate(R.layout.create_or_update_despesa_bottom_sheet, container, false)
 
-        val btnAdicionarOuAtualizarDespesa = view.findViewById<Button>(R.id.btn_adicionar_ou_atualizar_despesa_sheet)
+        val btnAdicionarOuAtualizarDespesa =
+            view.findViewById<Button>(R.id.btn_adicionar_ou_atualizar_despesa_sheet)
         val btnDeletarDespesa = view.findViewById<Button>(R.id.btn_deletar_despesa_sheet)
         val tieNomeDespesa = view.findViewById<TextInputEditText>(R.id.tie_nome_despesa)
         val tieValorDespesa = view.findViewById<TextInputEditText>(R.id.tie_valor_despesa)
@@ -112,7 +113,11 @@ class CriarOuAtualizarDespesaBottomSheet(
                 }
                 dismiss()
             } else {
-                Snackbar.make(btnAdicionarOuAtualizarDespesa, "Por favor, preencha todos os campos e selecione uma categoria.", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    btnAdicionarOuAtualizarDespesa,
+                    "Por favor, preencha todos os campos e selecione uma categoria.",
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
         }
 
@@ -128,8 +133,6 @@ class CriarOuAtualizarDespesaBottomSheet(
         return view
 
     }
-
-
 
 
     interface OnDespesaCreatedListener {

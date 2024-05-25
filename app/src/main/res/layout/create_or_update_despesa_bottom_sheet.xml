@@ -11,16 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
-        android:textStyle="bold"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
-        android:drawablePadding="12dp"
         android:drawableLeft="@drawable/inicial"
+        android:drawablePadding="12dp"
         android:fontFamily="@font/leonardo"
         android:paddingStart="8dp"
         android:text="@string/add_despesa_title"
         android:textColor="@color/app_financa2"
-        android:textSize="22sp" />
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tie_nome_despesa"
@@ -28,10 +28,12 @@
         android:layout_height="66dp"
         android:layout_marginStart="18dp"
         android:layout_marginTop="8dp"
-        android:textColorHint="@color/text_hint"
-        android:textColor="@color/app_financa2"
-        android:hint="Ex.: Compras de mercado"
         android:layout_marginEnd="24dp"
+        android:hint="Ex.: Compras de mercado"
+        android:fontFamily="@font/leonardo"
+        android:textColor="@color/app_financa2"
+        android:textColorHint="@color/text_hint"
+        android:inputType="text|textCapWords"
         android:orientation="horizontal"
         tools:listitem="@layout/item_despesa" />
 
@@ -41,10 +43,13 @@
         android:layout_height="66dp"
         android:layout_marginStart="18dp"
         android:layout_marginTop="8dp"
-        android:textColorHint="@color/text_hint"
-        android:textColor="@color/app_financa2"
-        android:hint="Ex.: 395.60"
         android:layout_marginEnd="24dp"
+        android:hint="Ex.: 395.60"
+        android:fontFamily="@font/leonardo"
+        android:textColor="@color/app_financa2"
+        android:textColorHint="@color/text_hint"
+        android:inputType="numberDecimal"
+        android:digits="0123456789.,"
         android:orientation="horizontal"
         tools:listitem="@layout/item_despesa" />
 
@@ -63,32 +68,32 @@
         android:id="@+id/rv_vincular_categoria"
         android:layout_width="372dp"
         android:layout_height="66dp"
-        android:tint="@color/white"
         android:layout_marginStart="18dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:orientation="horizontal"
+        android:tint="@color/white"
         tools:listitem="@layout/item_categoria" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2"
         android:layout_margin="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:padding="8dp"
-        android:gravity="center">
+        android:weightSum="2">
 
         <Button
             android:id="@+id/btn_adicionar_ou_atualizar_despesa_sheet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:background="@drawable/button_bg"
             android:fontFamily="@font/leonardo"
             android:text="@string/add_despesa_title"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -96,9 +101,9 @@
             android:id="@+id/btn_deletar_despesa_sheet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
             android:background="@drawable/button_bg"
             android:fontFamily="@font/leonardo"
             android:text="@string/delete"

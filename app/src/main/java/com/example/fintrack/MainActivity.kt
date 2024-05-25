@@ -2,6 +2,7 @@ package com.example.fintrack
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -120,13 +121,19 @@ class MainActivity : AppCompatActivity() {
                         else -> item
                     }
                 }
-                    if (selected.iconeCategoria != R.drawable.ic_add_all) {
-                        filterDespesaPelaCategoriaIcon(selected.iconeCategoria)
-                    } else {
-                        GlobalScope.launch(Dispatchers.IO) {
-                            getDespesasFromDataBase()
-                        }
+                if (selected.iconeCategoria != R.drawable.ic_add_all) {
+                    filterDespesaPelaCategoriaIcon(selected.iconeCategoria)
+                    // Calcular o total das despesas para a categoria selecionada
+                    val totalDespesasCategoria = calcularDespesasTotaisPorCategoria(listaDespesa, selected.iconeCategoria)
+                    // Atualizar o TextView com o valor total das despesas da categoria
+                    GlobalScope.launch(Dispatchers.Main) {
+                        atualizarDespesasTotais(totalDespesasCategoria)
                     }
+                } else {
+                    GlobalScope.launch(Dispatchers.IO) {
+                        getDespesasFromDataBase()
+                    }
+                }
                 categoriaAdapter.submitList(categoriaTemp)
             }
         }
@@ -216,6 +223,9 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.Main) {
             listaDespesa = despesasUi
             despesaAdapter.submitList(despesasUi)
+            // Atualiza o total de despesas gerais
+            val totalDespesas = calcularDespesasTotais(despesasUi)
+            atualizarDespesasTotais(totalDespesas)
         }
     }
 
@@ -278,7 +288,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun showCriarAtualizarDespesaBottomSheet(despesaUi: DespesaUi? = null) {
         val createDespesaBottomSheet = CriarOuAtualizarDespesaBottomSheet(
             despesa = despesaUi,
@@ -316,5 +325,18 @@ class MainActivity : AppCompatActivity() {
         )
 
         createDespesaBottomSheet.show(supportFragmentManager, "createDespesaBottomSheet")
+    }
+
+    private fun calcularDespesasTotais(despesas: List<DespesaUi>): Double {
+        return despesas.sumByDouble { it.valor.replace(",", ".").toDouble() }
+    }
+
+    private fun calcularDespesasTotaisPorCategoria(despesas: List<DespesaUi>, categoria: Int): Double {
+        return despesas.filter { it.categoria == categoria }.sumByDouble { it.valor.replace(",", ".").toDouble() }
+    }
+
+    private fun atualizarDespesasTotais(total: Double) {
+        val valorSaldoTextView = findViewById<TextView>(R.id.valor_saldo)
+        valorSaldoTextView.text = String.format("R$ %.2f", total)
     }
 }

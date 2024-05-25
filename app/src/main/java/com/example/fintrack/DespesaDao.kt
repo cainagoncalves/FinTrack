@@ -15,7 +15,7 @@ interface DespesaDao {
     fun getAll(): List<DespesaEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(despesaEntity: List<DespesaEntity>)
+    fun insertAll(despesaEntity: DespesaEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(despesaEntity: DespesaEntity)
