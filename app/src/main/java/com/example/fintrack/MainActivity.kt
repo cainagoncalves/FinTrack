@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         db.getDespesaDao()
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -190,6 +192,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Define o estado de vazio do app
+    @OptIn(DelicateCoroutinesApi::class)
     private fun getCategoriasFromDataBase() {
         val categoriasFromDb: List<CategoriaEntity> = categoriaDao.getAll()
         categoriaEntity = categoriasFromDb
@@ -250,42 +253,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun atualizarListaDeCategorias(categoriasFromDb: List<CategoriaEntity>) {
-        val categoriasUiData = categoriasFromDb.map {
-            CategoriaUi(
-                id = it.id,
-                iconeCategoria = it.iconeCategoria,
-                isSelected = it.isSelected,
-                cor = it.cor
-            )
-        }.toMutableList()
 
-        // Add fake + category
-        categoriasUiData.add(
-            CategoriaUi(
-                id = 0,
-                iconeCategoria = R.drawable.ic_add,
-                isSelected = false,
-                cor = R.color.white
-            )
-        )
-
-        val categoriaListTemp = mutableListOf(
-            CategoriaUi(
-                id = 0,
-                iconeCategoria = R.drawable.ic_add_all,
-                isSelected = true,
-                cor = R.color.white
-            )
-        )
-
-        categoriaListTemp.addAll(categoriasUiData)
-
-        // Atualizar a lista de categorias e notificar o adaptador
-        listaCategoria = categoriaListTemp
-        categoriaAdapter.submitList(listaCategoria)
-    }
-
+    @OptIn(DelicateCoroutinesApi::class)
     private fun getDespesasFromDataBase() {
         val despesasFromDb: List<DespesaEntity> = despesaDao.getAll()
         val despesasUi: List<DespesaUi> = despesasFromDb.map {
@@ -307,6 +276,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun insertCategorias(categoriaEntity: CategoriaEntity) {
         GlobalScope.launch(Dispatchers.IO) {
             categoriaDao.insert(categoriaEntity)
@@ -314,6 +284,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun insertDespesas(despesaEntity: DespesaEntity) {
         GlobalScope.launch(Dispatchers.IO) {
             despesaDao.insert(despesaEntity)
@@ -321,6 +292,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun updateDespesas(despesaEntity: DespesaEntity) {
         GlobalScope.launch(Dispatchers.IO) {
             despesaDao.update(despesaEntity)
@@ -328,6 +300,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun deleteDespesas(despesaEntity: DespesaEntity) {
         GlobalScope.launch(Dispatchers.IO) {
             despesaDao.delete(despesaEntity)
@@ -335,6 +308,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun deleteCategoria(categoriaEntity: CategoriaEntity) {
         GlobalScope.launch(Dispatchers.IO) {
             val despesasASeremDeletadas =
@@ -346,6 +320,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun filterDespesaPelaCategoriaIcon(categoria: Int) {
         GlobalScope.launch(Dispatchers.IO) {
             val despesasFromDb: List<DespesaEntity> = despesaDao.getAllByCategoriaIcon(categoria)
@@ -413,6 +388,7 @@ class MainActivity : AppCompatActivity() {
         return despesas.filter { it.categoria == categoria }.sumByDouble { it.valor.replace(",", ".").toDouble() }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun atualizarDespesasTotais(total: Double) {
         val valorSaldoTextView = findViewById<TextView>(R.id.valor_saldo)
         valorSaldoTextView.text = String.format("R$ %.2f", total)

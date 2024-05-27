@@ -47,7 +47,11 @@ class CriarCategoriaBottomSheet(
         // Crie e configure o adapter
         val categoriaAdapter = CategoriaAdapter()
         categoriaAdapter.setOnItemClickListener { categoria ->
+            listaCategoria.forEach { it.isSelected = false }
+            categoria.isSelected = true
             selectedCategoria = categoria
+            selectedCategoria = categoria
+            categoriaAdapter.notifyDataSetChanged()
         }
         rvCriarCategoria.adapter = categoriaAdapter
         categoriaAdapter.submitList(listaCategoria)
@@ -58,7 +62,7 @@ class CriarCategoriaBottomSheet(
                 selectedColor = button.backgroundTintList?.defaultColor ?: R.color.white
                 selectedButton?.setBackgroundResource(R.drawable.filter_chips_background)
                 selectedButton = button
-                selectedButton?.setBackgroundResource(R.drawable.selected_button_background)
+                selectedButton?.setBackgroundResource(R.drawable.selected_button_background_colors)
             }
         }
 

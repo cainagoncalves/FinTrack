@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 
 class CriarOuAtualizarDespesaBottomSheet(
-    private val categoriaList: List<CategoriaEntity>, // Alteração aqui
+    private val categoriaList: List<CategoriaEntity>,
     private val despesa: DespesaUi? = null,
     private val onCreateClicked: (DespesaUi) -> Unit,
     private val onUpdateClicked: (DespesaUi) -> Unit,
@@ -52,10 +52,14 @@ class CriarOuAtualizarDespesaBottomSheet(
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val categoriaAdapter = CategoriaAdapter()
         rvCategoriaDespesa.adapter = categoriaAdapter
-        categoriaAdapter.submitList(convertToCategoriaUiList(filteredCategoriaList)) // Alteração aqui
+        val categoriaUiList = convertToCategoriaUiList(filteredCategoriaList)
+        categoriaAdapter.submitList(categoriaUiList)
 
         categoriaAdapter.setOnItemClickListener { categoria ->
             categoriaSelecionada = categoria
+            categoriaUiList.forEach { it.isSelected = false }
+            categoria.isSelected = true
+            categoriaAdapter.notifyDataSetChanged()
         }
 
         // faz a alteração dos títulos e botões entre criar/atualizar despesa
@@ -70,10 +74,17 @@ class CriarOuAtualizarDespesaBottomSheet(
             tieValorDespesa.setText(despesa.valor)
             btnDeletarDespesa.isVisible = true
 
-            // Seleciona a categoria vinculada à despesa
+            // Seleciona a categoria vinculada à despesa e mostra no bottomsheet
             val categoria = categoriaList.find { it.iconeCategoria == despesa.categoria }
-            categoriaSelecionada = categoria?.let { convertToCategoriaUiList(listOf(it)).firstOrNull() }
-            categoriaAdapter.setSelectedCategory(categoriaSelecionada)
+            categoriaSelecionada = categoria?.let {
+                val categoriaUi = CategoriaUi(it.id, it.iconeCategoria, true, it.cor)
+                val index = categoriaUiList.indexOfFirst { ui -> ui.id == categoriaUi.id }
+                if (index != -1) {
+                    categoriaUiList[index].isSelected = true
+                    categoriaAdapter.notifyItemChanged(index)
+                }
+                categoriaUi
+            }
         }
 
         btnDeletarDespesa.setOnClickListener {

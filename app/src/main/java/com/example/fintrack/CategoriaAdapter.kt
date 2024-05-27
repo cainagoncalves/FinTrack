@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-// Faz a adaptação entre o data class e o item_list layout
 class CategoriaAdapter :
-    ListAdapter<CategoriaUi, CategoriaAdapter.CategoriaViewHolder>(CategoriaAdapter) {
+    ListAdapter<CategoriaUi, CategoriaAdapter.CategoriaViewHolder>(CategoriaDiffCallback()) {
 
     private var onClick: (CategoriaUi) -> Unit = {
         throw IllegalArgumentException("onClick not initialized")
@@ -20,19 +19,12 @@ class CategoriaAdapter :
         throw IllegalArgumentException("onLongClick not initialized")
     }
 
-    private var selectedPosition = RecyclerView.NO_POSITION
-
     fun setOnItemClickListener(onClick: (CategoriaUi) -> Unit) {
         this.onClick = onClick
     }
 
-    fun setOnLongClickListener(onLongClick: (CategoriaUi) -> Unit) { // Correção aqui
+    fun setOnLongClickListener(onLongClick: (CategoriaUi) -> Unit) {
         this.onLongClick = onLongClick
-    }
-
-    fun setSelectedCategory(category: CategoriaUi?) {
-        selectedPosition = if (category == null) RecyclerView.NO_POSITION else currentList.indexOf(category)
-        notifyDataSetChanged()
     }
 
     // Cria um view holder
@@ -44,7 +36,7 @@ class CategoriaAdapter :
     // Atrela o dado com a UI views
     override fun onBindViewHolder(holder: CategoriaViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, onClick, position, onLongClick)
+        holder.bind(item, onClick, onLongClick)
     }
 
     // View que segura os dados
@@ -54,26 +46,20 @@ class CategoriaAdapter :
         fun bind(
             categoria: CategoriaUi,
             onClick: (CategoriaUi) -> Unit,
-            position: Int,
             onLongClickListener: (CategoriaUi) -> Unit
         ) {
             btnCategoria.setImageResource(categoria.iconeCategoria)
-            btnCategoria.isSelected = position == selectedPosition
+            btnCategoria.isSelected = categoria.isSelected
+
+            // Atualiza a aparência baseada na seleção
+            if (categoria.isSelected) {
+                btnCategoria.setBackgroundResource(R.drawable.selected_button_background)
+            } else {
+                btnCategoria.setBackgroundResource(R.drawable.filter_chips_background)
+            }
 
             // Adiciona um listener ao botão para atualizar a seleção imediatamente
             btnCategoria.setOnClickListener {
-                // Verifica se a mesma categoria foi clicada novamente
-                val isSameCategoryClicked = position == selectedPosition
-
-                // Atualiza a seleção apenas se for uma categoria diferente
-                if (!isSameCategoryClicked) {
-                    val previousPosition = selectedPosition
-                    selectedPosition = position
-                    notifyItemChanged(previousPosition)
-                    notifyItemChanged(selectedPosition)
-                }
-
-                // Invoca o listener onClick passando o item clicado
                 onClick.invoke(categoria)
             }
 
@@ -85,13 +71,15 @@ class CategoriaAdapter :
     }
 
     // Compara a diferença quando a lista é atualizada
-    companion object : DiffUtil.ItemCallback<CategoriaUi>() {
-        override fun areItemsTheSame(oldItem: CategoriaUi, newItem: CategoriaUi): Boolean {
-            return oldItem == newItem
-        }
+    companion object {
+        class CategoriaDiffCallback : DiffUtil.ItemCallback<CategoriaUi>() {
+            override fun areItemsTheSame(oldItem: CategoriaUi, newItem: CategoriaUi): Boolean {
+                return oldItem == newItem
+            }
 
-        override fun areContentsTheSame(oldItem: CategoriaUi, newItem: CategoriaUi): Boolean {
-            return oldItem.iconeCategoria == newItem.iconeCategoria
+            override fun areContentsTheSame(oldItem: CategoriaUi, newItem: CategoriaUi): Boolean {
+                return oldItem.iconeCategoria == newItem.iconeCategoria
+            }
         }
     }
 }
