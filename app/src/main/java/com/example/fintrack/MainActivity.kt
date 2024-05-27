@@ -396,15 +396,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun mostrarBtnCriarCategoriaSheet(){
         val criarCategoriaBottomSheet =
-            CriarCategoriaBottomSheet { idCategoria, iconeCategoria, corCategoria ->
-                val categoriaEntity = CategoriaEntity(
-                    id = idCategoria,
-                    iconeCategoria = iconeCategoria,
-                    isSelected = false,
-                    cor = corCategoria
-                )
-                insertCategorias(categoriaEntity)
-            }
+            CriarCategoriaBottomSheet(
+                categoriaDao = categoriaDao,
+                onCreateClicked = { idCategoria, iconeCategoria, corCategoria ->
+                    val categoriaEntity = CategoriaEntity(
+                        id = idCategoria,
+                        iconeCategoria = iconeCategoria,
+                        isSelected = false,
+                        cor = corCategoria
+                    )
+                    insertCategorias(categoriaEntity)
+                }
+            )
         criarCategoriaBottomSheet.show(
             supportFragmentManager,
             "criarCategoriaBottomSheet"

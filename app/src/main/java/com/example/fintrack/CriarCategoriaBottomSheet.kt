@@ -10,15 +10,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CriarCategoriaBottomSheet(
-    private val onCreateClicked: (idCategoria: Long, iconeCategoria: Int, corCategoria: Int) -> Unit
+    private val onCreateClicked: (idCategoria: Long, iconeCategoria: Int, corCategoria: Int) -> Unit,
+    private val categoriaDao: CategoriaDao
 ) : BottomSheetDialogFragment() {
 
     private var listener: OnCategoriaCreatedListener? = null
     private var selectedCategoria: CategoriaUi? = null
     private var selectedColor: Int = R.color.white // Cor padrão
     private var selectedButton: Button? = null
+    private var categoriaEntity = listOf<CategoriaEntity>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +56,6 @@ class CriarCategoriaBottomSheet(
             listaCategoria.forEach { it.isSelected = false }
             categoria.isSelected = true
             selectedCategoria = categoria
-            selectedCategoria = categoria
             categoriaAdapter.notifyDataSetChanged()
         }
         rvCriarCategoria.adapter = categoriaAdapter
@@ -66,17 +71,30 @@ class CriarCategoriaBottomSheet(
             }
         }
 
+        // Carregar categorias existentes do banco de dados
+        GlobalScope.launch(Dispatchers.Main) {
+            categoriaEntity = withContext(Dispatchers.IO) {
+                categoriaDao.getAll()
+            }
+        }
+
         btnCreate.setOnClickListener {
-            if( selectedCategoria == null || selectedButton == null) {
+            if (selectedCategoria == null || selectedButton == null) {
                 Snackbar.make(btnCreate, "Por favor, selecione um ícone e uma cor para a categoria", Snackbar.LENGTH_LONG).show()
             } else {
-                selectedCategoria?.let { categoria ->
-                    val idCategoria = System.currentTimeMillis() // Exemplo para gerar um ID único
-                    onCreateClicked(idCategoria, categoria.iconeCategoria, selectedColor)
-                    dismiss()
+                // Verifique se o ícone já está em uso
+                val iconeSelecionado = selectedCategoria!!.iconeCategoria
+                val iconeExistente = categoriaEntity.any { it.iconeCategoria == iconeSelecionado }
+                if (iconeExistente) {
+                    Snackbar.make(btnCreate, "O ícone selecionado já está em uso, por favor, escolha outro", Snackbar.LENGTH_LONG).show()
+                } else {
+                    selectedCategoria?.let { categoria ->
+                        val idCategoria = System.currentTimeMillis() // Exemplo para gerar um ID único
+                        onCreateClicked(idCategoria, categoria.iconeCategoria, selectedColor)
+                        dismiss()
+                    }
                 }
             }
-
         }
 
         dialog?.setOnShowListener { dialog ->
