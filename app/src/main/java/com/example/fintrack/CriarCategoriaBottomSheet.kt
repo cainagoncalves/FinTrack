@@ -15,12 +15,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+// BottomSheetDialogFragment para criar uma nova categoria
 class CriarCategoriaBottomSheet(
     private val onCreateClicked: (idCategoria: Long, iconeCategoria: Int, corCategoria: Int) -> Unit,
     private val categoriaDao: CategoriaDao
 ) : BottomSheetDialogFragment() {
 
-    private var listener: OnCategoriaCreatedListener? = null
     private var selectedCategoria: CategoriaUi? = null
     private var selectedColor: Int = R.color.white // Cor padrão
     private var selectedButton: Button? = null
@@ -33,6 +33,7 @@ class CriarCategoriaBottomSheet(
     ): View? {
         val view = inflater.inflate(R.layout.create_category_bottom_sheet, container, false)
 
+        // Inicialização dos componentes da UI
         val btnCreate = view.findViewById<Button>(R.id.btn_criar_categoria_sheet)
         val rvCriarCategoria = view.findViewById<RecyclerView>(R.id.rv_criar_categoria)
         val colorButtons = listOf(
@@ -48,6 +49,7 @@ class CriarCategoriaBottomSheet(
         }
 
         val listaCategoria = mutableListOf<CategoriaUi>()
+        // Método para adicionar as categorias predefinidas
         getCategoria(listaCategoria)
 
         // Crie e configure o adapter
@@ -108,6 +110,7 @@ class CriarCategoriaBottomSheet(
         return view
     }
 
+    // Método para adicionar categorias predefinidas
     private fun getCategoria(listaCategoria: MutableList<CategoriaUi>) {
         listaCategoria.apply {
             add(CategoriaUi(0, R.drawable.ic_home, false))
@@ -122,9 +125,5 @@ class CriarCategoriaBottomSheet(
             add(CategoriaUi(0, R.drawable.ic_gas_station, false))
             add(CategoriaUi(0, R.drawable.ic_game_control, false))
         }
-    }
-
-    interface OnCategoriaCreatedListener {
-        fun onCategoriaCreated(categoria: CategoriaUi)
     }
 }

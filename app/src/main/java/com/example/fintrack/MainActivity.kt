@@ -19,10 +19,12 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
+    // Declaração de variáveis de listas de categorias e despesas
     private var listaCategoria = listOf<CategoriaUi>()
     private var categoriaEntity = listOf<CategoriaEntity>()
     private var listaDespesa = listOf<DespesaUi>()
 
+    // Declaração de variáveis para os elementos da interface de usuário
     private lateinit var rvCategoria: RecyclerView
     private lateinit var rvDespesa: RecyclerView
     private lateinit var ctnCategoriaVazia: LinearLayout
@@ -31,13 +33,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvDespesas: TextView
     private lateinit var ctnValorTotal: LinearLayout
 
-
+    // Declaração de adaptadores para RecyclerViews
     private lateinit var categoriaAdapter: CategoriaAdapter
     private val despesaAdapter by lazy {
         DespesaAdapter()
     }
 
-    // Faz com que a base de dados seja utilizada apenas se necessário, p/ não gastar memória
+    // Inicialização do banco de dados usando Room, lazy para inicializar apenas quando necessário
     private val db by lazy {
         Room.databaseBuilder(
             applicationContext,
@@ -45,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         ).build()
     }
 
+    // Acesso aos DAOs (Data Access Objects) do banco de dados
     private val categoriaDao by lazy {
         db.getCategoriaDao()
     }
@@ -59,46 +62,43 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        //TV despesa e categoria
+        // Inicialização dos TextViews de despesas e categorias
         tvDespesas = findViewById(R.id.tv_despesas)
         tvCategorias = findViewById(R.id.tv_categorias)
         ctnValorTotal = findViewById(R.id.container_layout)
 
-        // Configurar RecyclerView de categorias
+        // Configuração do RecyclerView de categorias
         rvCategoria = findViewById(R.id.rv_categoria)
         categoriaAdapter = CategoriaAdapter()
         rvCategoria.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        // Rv de estado vazio
+        // Inicialização do layout de estado vazio
         ctnCategoriaVazia = findViewById(R.id.ll_empty_view)
 
-        // Configurar RecyclerView de despesas
+        // Configuração do RecyclerView de despesas
         rvDespesa = findViewById(R.id.rv_despesa)
         rvDespesa.layoutManager = LinearLayoutManager(this)
 
-        // Dar ação ao botão de vazio
+        // Configuração do botão para criar categorias no estado vazio
         val btnCreateEmpty = findViewById<Button>(R.id.btn_adicionar_vazio)
-
         btnCreateEmpty.setOnClickListener {
             mostrarBtnCriarCategoriaSheet()
         }
 
-        // Chamar botão para criar despesas
+        // Configuração do botão para criar despesas
         criarDespesa = findViewById(R.id.btn_adicionar_despesa)
-
         criarDespesa.setOnClickListener {
             showCriarAtualizarDespesaBottomSheet()
         }
 
-        //Configurando adapter para atualizar despesas
+        // Configuração do adapter para atualizar despesas
         despesaAdapter.setOnClickListener { despesa ->
             showCriarAtualizarDespesaBottomSheet(despesa)
         }
 
-        //Configurando longoClick para deletar categorias
+        // Configuração de long click para deletar categorias
         categoriaAdapter.setOnLongClickListener { categoriaAserDeletada ->
-            // Configurando a caixa de informação ao deletar categoria
+            // Exibição de caixa de diálogo para confirmar deleção
             if (categoriaAserDeletada.iconeCategoria != R.drawable.ic_add && categoriaAserDeletada.iconeCategoria != R.drawable.ic_add_all) {
                 val title: String = this.getString(R.string.deletar_categoria_title)
                 val descricao: String = this.getString(R.string.deletar_categoria_descricao)
@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Configurar botão para abrir CriarCategoriaBottomSheet
+        // Configuração de click para abrir CriarCategoriaBottomSheet
         categoriaAdapter.setOnItemClickListener { selected ->
             if (selected.iconeCategoria == R.drawable.ic_add) {
                 mostrarBtnCriarCategoriaSheet()
@@ -159,20 +159,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Exibe as categorias selecionadas na view
+        // Exibir as categorias na RecyclerView
         rvCategoria.adapter = categoriaAdapter
         GlobalScope.launch(Dispatchers.IO) {
             getCategoriasFromDataBase()
         }
 
-        // Exibe as despesas selecionadas na view
+        // Exibir as despesas na RecyclerView
         rvDespesa.adapter = despesaAdapter
         GlobalScope.launch(Dispatchers.IO) {
             getDespesasFromDataBase()
         }
     }
 
-    //Função para exibir infoBottomSheet
+    // Função para exibir um diálogo informativo
     private fun showInfoDialog(
         title: String,
         description: String,
@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    // Define o estado de vazio do app
+    // Função para obter categorias do banco de dados e definir o estado da UI
     @OptIn(DelicateCoroutinesApi::class)
     private fun getCategoriasFromDataBase() {
         val categoriasFromDb: List<CategoriaEntity> = categoriaDao.getAll()
@@ -226,7 +226,7 @@ class MainActivity : AppCompatActivity() {
             )
         }.toMutableList()
 
-        // Add fake + category
+        // Adicionar categoria "fake" para criação de novas categorias
         categoriasUiData.add(
             CategoriaUi(
                 id = 0,
@@ -246,14 +246,14 @@ class MainActivity : AppCompatActivity() {
         )
 
         categoriaListTemp.addAll(categoriasUiData)
-        // Ajuda a não dar erro, pois para não dar erro precisa ir para a Main thread
+        // Atualiza a lista de categorias na Main thread
         GlobalScope.launch(Dispatchers.Main) {
             listaCategoria = categoriaListTemp
             categoriaAdapter.submitList(listaCategoria)
         }
     }
 
-
+    // Função para obter despesas do banco de dados e atualizar a UI
     @OptIn(DelicateCoroutinesApi::class)
     private fun getDespesasFromDataBase() {
         val despesasFromDb: List<DespesaEntity> = despesaDao.getAll()
@@ -266,7 +266,7 @@ class MainActivity : AppCompatActivity() {
                 cor = it.cor
             )
         }
-        // Ajuda a não dar erro, pois para não dar erro precisa ir para a Main thread
+        // Atualiza a lista de despesas na Main thread
         GlobalScope.launch(Dispatchers.Main) {
             listaDespesa = despesasUi
             despesaAdapter.submitList(despesasUi)
@@ -276,6 +276,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Função para inserir categorias no banco de dados
     @OptIn(DelicateCoroutinesApi::class)
     private fun insertCategorias(categoriaEntity: CategoriaEntity) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -284,6 +285,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Função para inserir despesas no banco de dados
     @OptIn(DelicateCoroutinesApi::class)
     private fun insertDespesas(despesaEntity: DespesaEntity) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -292,6 +294,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Função para atualizar despesas no banco de dados
     @OptIn(DelicateCoroutinesApi::class)
     private fun updateDespesas(despesaEntity: DespesaEntity) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -300,6 +303,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Função para deletar despesas no banco de dados
     @OptIn(DelicateCoroutinesApi::class)
     private fun deleteDespesas(despesaEntity: DespesaEntity) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -308,6 +312,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Função para deletar categorias e suas despesas associadas no banco de dados
     @OptIn(DelicateCoroutinesApi::class)
     private fun deleteCategoria(categoriaEntity: CategoriaEntity) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -320,6 +325,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Função para filtrar despesas por ícone de categoria
     @OptIn(DelicateCoroutinesApi::class)
     private fun filterDespesaPelaCategoriaIcon(categoria: Int) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -333,14 +339,14 @@ class MainActivity : AppCompatActivity() {
                     cor = it.cor
                 )
             }
-
-            //Ajuda a não dar erro, pois para não dar erro precisar ir para a Main thread
+            // Atualiza a lista de despesas na Main thread
             GlobalScope.launch(Dispatchers.Main) {
                 despesaAdapter.submitList(despesasUi)
             }
         }
     }
 
+    // Função para exibir o bottom sheet de criação/atualização de despesas
     private fun showCriarAtualizarDespesaBottomSheet(despesaUi: DespesaUi? = null) {
         val createDespesaBottomSheet = CriarOuAtualizarDespesaBottomSheet(
             despesa = despesaUi,
@@ -380,20 +386,24 @@ class MainActivity : AppCompatActivity() {
         createDespesaBottomSheet.show(supportFragmentManager, "createDespesaBottomSheet")
     }
 
+    // Função para calcular o total das despesas
     private fun calcularDespesasTotais(despesas: List<DespesaUi>): Double {
         return despesas.sumByDouble { it.valor.replace(",", ".").toDouble() }
     }
 
+    // Função para calcular o total das despesas por categoria
     private fun calcularDespesasTotaisPorCategoria(despesas: List<DespesaUi>, categoria: Int): Double {
         return despesas.filter { it.categoria == categoria }.sumByDouble { it.valor.replace(",", ".").toDouble() }
     }
 
+    // Função para atualizar o valor total das despesas no TextView
     @SuppressLint("DefaultLocale")
     private fun atualizarDespesasTotais(total: Double) {
         val valorSaldoTextView = findViewById<TextView>(R.id.valor_saldo)
         valorSaldoTextView.text = String.format("R$ %.2f", total)
     }
 
+    // Função para exibir o bottom sheet de criação de categorias
     private fun mostrarBtnCriarCategoriaSheet(){
         val criarCategoriaBottomSheet =
             CriarCategoriaBottomSheet(
@@ -414,6 +424,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    // Função para verificar se um recurso existe
     private fun Context.hasResource(resourceId: Int): Boolean {
         return try {
             resources.getResourceName(resourceId)

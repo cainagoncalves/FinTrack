@@ -16,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 
+// BottomSheetDialogFragment para criar ou atualizar uma despesa
 class CriarOuAtualizarDespesaBottomSheet(
     private val categoriaList: List<CategoriaEntity>,
     private val despesa: DespesaUi? = null,
@@ -25,19 +26,23 @@ class CriarOuAtualizarDespesaBottomSheet(
 
 ) : BottomSheetDialogFragment() {
 
+    // Ícones a serem ocultados
     private val iconsToHide = listOf(R.drawable.ic_add, R.drawable.ic_add_all)
 
-    @SuppressLint("MissingInflatedId", "LongLogTag", "ResourceAsColor")
+    @SuppressLint("MissingInflatedId", "LongLogTag", "ResourceAsColor", "NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Filtra a lista de categorias para ocultar os ícones especificados
         val filteredCategoriaList = categoriaList.filter { it.iconeCategoria !in iconsToHide }
 
+        // Infla o layout do bottom sheet
         val view =
             inflater.inflate(R.layout.create_or_update_despesa_bottom_sheet, container, false)
 
+        // Inicializa os componentes da UI
         val btnAdicionarOuAtualizarDespesa =
             view.findViewById<Button>(R.id.btn_adicionar_ou_atualizar_despesa_sheet)
         val btnDeletarDespesa = view.findViewById<Button>(R.id.btn_deletar_despesa_sheet)
@@ -48,6 +53,7 @@ class CriarOuAtualizarDespesaBottomSheet(
 
         var categoriaSelecionada: CategoriaUi? = null
 
+        // Configura o RecyclerView para mostrar as categorias
         rvCategoriaDespesa.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val categoriaAdapter = CategoriaAdapter()
@@ -55,6 +61,7 @@ class CriarOuAtualizarDespesaBottomSheet(
         val categoriaUiList = convertToCategoriaUiList(filteredCategoriaList)
         categoriaAdapter.submitList(categoriaUiList)
 
+        // Configura o clique nos itens do RecyclerView
         categoriaAdapter.setOnItemClickListener { categoria ->
             categoriaSelecionada = categoria
             categoriaUiList.forEach { it.isSelected = false }
@@ -62,7 +69,7 @@ class CriarOuAtualizarDespesaBottomSheet(
             categoriaAdapter.notifyDataSetChanged()
         }
 
-        // faz a alteração dos títulos e botões entre criar/atualizar despesa
+        // Configura os títulos e botões dependendo se é para criar ou atualizar uma despesa
         if (despesa == null) {
             btnDeletarDespesa.isVisible = false
             tvAdicionarDespesa.setText("Adicionar despesa")
@@ -74,7 +81,7 @@ class CriarOuAtualizarDespesaBottomSheet(
             tieValorDespesa.setText(despesa.valor)
             btnDeletarDespesa.isVisible = true
 
-            // Seleciona a categoria vinculada à despesa e mostra no bottomsheet
+            // Seleciona a categoria vinculada à despesa e mostra no bottom sheet
             val categoria = categoriaList.find { it.iconeCategoria == despesa.categoria }
             categoriaSelecionada = categoria?.let {
                 val categoriaUi = CategoriaUi(it.id, it.iconeCategoria, true, it.cor)
@@ -87,21 +94,23 @@ class CriarOuAtualizarDespesaBottomSheet(
             }
         }
 
+        // Configura o clique no botão de deletar despesa
         btnDeletarDespesa.setOnClickListener {
             if (despesa != null) {
                 onDeleteClicked.invoke(despesa)
                 dismiss()
             } else {
-                Log.d("CriarOuAtualizarDespesaBottomSheet", "Task not found")
+                Log.d("CriarOuAtualizarDespesaBottomSheet", "Despesa não encontrada")
             }
         }
 
+        // Configura o clique no botão de adicionar ou atualizar despesa
         btnAdicionarOuAtualizarDespesa.setOnClickListener {
             val nome = tieNomeDespesa.text.toString().trim()
             val valor = tieValorDespesa.text.toString().trim()
             if (categoriaSelecionada != null && nome.isNotEmpty() && valor.isNotEmpty()) {
-
                 if (despesa == null) {
+                    // Cria uma nova despesa
                     onCreateClicked.invoke(
                         DespesaUi(
                             id = 0,
@@ -112,6 +121,7 @@ class CriarOuAtualizarDespesaBottomSheet(
                         )
                     )
                 } else {
+                    // Atualiza a despesa existente
                     onUpdateClicked.invoke(
                         DespesaUi(
                             id = despesa.id,
@@ -124,6 +134,7 @@ class CriarOuAtualizarDespesaBottomSheet(
                 }
                 dismiss()
             } else {
+                // Mostra uma mensagem de erro se os campos não estiverem preenchidos
                 Snackbar.make(
                     btnAdicionarOuAtualizarDespesa,
                     "Por favor, preencha todos os campos e selecione uma categoria",
@@ -132,6 +143,7 @@ class CriarOuAtualizarDespesaBottomSheet(
             }
         }
 
+        // Configura o BottomSheet para ocupar a tela inteira
         dialog?.setOnShowListener { dialog ->
             val bottomSheet = dialog as BottomSheetDialog
             val bottomSheetView =
@@ -142,9 +154,9 @@ class CriarOuAtualizarDespesaBottomSheet(
         }
 
         return view
-
     }
 
+    // Converte uma lista de CategoriaEntity para uma lista de CategoriaUi
     private fun convertToCategoriaUiList(categoriasFromDb: List<CategoriaEntity>): List<CategoriaUi> {
         return categoriasFromDb.map {
             CategoriaUi(
@@ -156,3 +168,4 @@ class CriarOuAtualizarDespesaBottomSheet(
         }
     }
 }
+
